@@ -33,7 +33,7 @@ export class CategoriasPage {
       this.items = response;
     },
     error =>{
-      console.log(error);
+      //deixo em branco para deixar a responsabilidade para o interception e não para o contorlador
     });
 
   }
