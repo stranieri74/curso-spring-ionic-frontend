@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { CredenciaisDTO } from './../../Models/credenciais.dto';
+import { Component, ComponentFactoryResolver } from '@angular/core';
 import { IonicPage, MenuController, NavController } from 'ionic-angular';
 
 @IonicPage()
@@ -9,11 +10,18 @@ import { IonicPage, MenuController, NavController } from 'ionic-angular';
 })
 export class HomePage {
 
+  //cria esse objeto para pegar as informações dos formulários
+  creds : CredenciaisDTO = {
+     email: "",
+     senha: ""
+  };
+
   constructor(public navCtrl: NavController, public menu: MenuController) {
 
   }
 
   login(){
+    console.log(this.creds);
     this.navCtrl.setRoot('CategoriasPage');
 
   }
