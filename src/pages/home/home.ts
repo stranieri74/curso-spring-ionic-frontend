@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import { CredenciaisDTO } from './../../Models/credenciais.dto';
 import { Component, ComponentFactoryResolver } from '@angular/core';
 import { IonicPage, MenuController, NavController } from 'ionic-angular';
@@ -16,13 +17,20 @@ export class HomePage {
      senha: ""
   };
 
-  constructor(public navCtrl: NavController, public menu: MenuController) {
+  constructor(
+    public navCtrl: NavController, 
+    public menu: MenuController,
+    public auth: AuthService) {
 
   }
 
   login(){
-    console.log(this.creds);
-    this.navCtrl.setRoot('CategoriasPage');
+    this.auth.authenticate(this.creds)
+    .subscribe(response => {
+      console.log(response.headers.get('Authorization'));
+      this.navCtrl.setRoot('CategoriasPage');
+    },
+    error =>{})
 
   }
   //entrar na pagina desabilita o menu tela home
