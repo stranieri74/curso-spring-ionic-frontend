@@ -1,8 +1,6 @@
 import { StorageService } from './../services/storage.service';
-import { LocalUser } from './../Models/local_user';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Console } from "@angular/core/src/console";
 import { Observable } from 'rxjs/Rx'; //IMPORTANTE: IMPORT ATUALIZADO
 import { API_CONFIG } from '../config/api.config';
 
