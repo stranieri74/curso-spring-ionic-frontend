@@ -37,6 +37,15 @@ export class HomePage {
   ionViewWillEnter() {
     this.menu.swipeEnable(false);
     }
+    //valida o token se é valido não expirou
+    ionViewDidEnter(){
+      this.auth.refreshToken()
+      .subscribe(response => {
+        this.auth.successfulLogin(response.headers.get('Authorization'));
+        this.navCtrl.setRoot('CategoriasPage');
+      },
+      error =>{}) 
+    }
 
     //entrar na pagina habilita o menu tela home
     ionViewDidLeave() {

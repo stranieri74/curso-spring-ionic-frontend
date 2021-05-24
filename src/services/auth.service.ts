@@ -23,6 +23,15 @@ export class AuthService{
       });
    }
 
+   refreshToken(){
+    return this.http.post(`${API_CONFIG.baseUrl}/auth/refresh_token`, 
+    {},
+    {
+        observe: 'response', //pego o response
+        responseType: 'text', // retorna o corpo vazio para não fazer parse de json
+    });
+ }
+
    successfulLogin(authorizationValue : string){
        let tok = authorizationValue.substring(7); // pega o tocken sem a palavra berer
        let user : LocalUser = {
