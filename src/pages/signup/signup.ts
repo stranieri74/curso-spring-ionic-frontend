@@ -1,8 +1,9 @@
+import { ClienteService } from './../../services/domain/cliente.service';
 import { EstadoService } from './../../services/domain/estado.service';
 import { CidadeService } from './../../services/domain/cidade.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EstadoDTO } from '../../Models/estado.dto';
 import { CidadeDTO } from '../../Models/cidade.dto';
 
@@ -21,7 +22,9 @@ export class SignupPage {
     public navParams: NavParams,
     public formBuilder: FormBuilder,
     public cidadeService: CidadeService,
-    public estadoService: EstadoService) {
+    public estadoService: EstadoService,
+    public clienteService: ClienteService,
+    public alertCtrl: AlertController) {
       this.formGroup = this.formBuilder.group(
         {
             nome: ['',[Validators.required,
@@ -33,13 +36,13 @@ export class SignupPage {
 
             tipo:['',[Validators.required]],
 
-            cpfOuCnpj: ['',[Validators.required,
+            cpfOucnpj: ['',[Validators.required,
               Validators.minLength(11),
               Validators.maxLength(14)]],
 
             senha:['',[Validators.required]],
 
-            lagradouro:['',[Validators.required]],
+            logradouro:['',[Validators.required]],
 
             numero:['',[Validators.required]],
 
@@ -83,7 +86,27 @@ export class SignupPage {
     error => {});
   }
   signupUser(){
-    console.log("Enviou o form")
+    console.log(this.formGroup.value);
+    this.clienteService.insert(this.formGroup.value)
+    .subscribe(response =>{
+      this.showInsertOk();
+    },
+    error =>{});
+  }
+
+  showInsertOk(){
+let alert = this.alertCtrl.create({
+  title: 'Sucesso!',
+  message: 'Cadastro Efetuado com sucesso',
+  enableBackdropDismiss: false,
+  buttons:[{
+    text: 'Ok',
+    handler:() =>{
+      this.navCtrl.setRoot('HomePage');
+    }
+  }]
+});
+   alert.present();
   }
 
 }
