@@ -1,3 +1,4 @@
+import { ProdutoDTO } from './../../Models/produto.dto';
 import { CategoriaService } from './../../services/domain/categoria.service';
 import { CategoriaDTO } from './../../Models/categoria.dto';
 import { Component } from '@angular/core';
