@@ -1,3 +1,5 @@
+import { ClienteService } from './../../services/domain/cliente.service';
+import { StorageService } from './../../services/storage.service';
 import { EnderecoDTO } from './../../Models/endereco.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -11,43 +13,26 @@ export class PickAddressPage {
 
   items: EnderecoDTO[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams,
+    public storage : StorageService,
+    public clienteService : ClienteService) {
   }
 
   ionViewDidLoad() {
-    this.items = [{
-      id: "1",
-      logradouro: "Rua Antonio zanoni",
-      numero:"47",
-      complemento:"apto 500",
-      bairro: "Centro",
-      cep: "14180000",
-      cidade:{
-        id:"1",
-        nome:"uberlandia",
-        estado:{
-          id:"1",
-          nome: "Minas Gerais"
+    let localUser = this.storage.getLocalUser();
+    if (localStorage && localUser.email){
+      this.clienteService.findByEmail(localUser.email)
+      .subscribe(response => {
+        this.items = response['enderecos'];
+      }, error => {
+        if(error.status == 403){
+          this.navCtrl.setRoot('HomePage');
         }
-      }
-    },
-    {
-      id: "2",
-      logradouro: "Rua Antonio zanoni",
-      numero:"50",
-      complemento:"apto 511",
-      bairro: "Centro",
-      cep: "14180000",
-      cidade:{
-        id:"2",
-        nome:"são Paulo",
-        estado:{
-          id:"2",
-          nome: "São Paulo"
-        }
-      }
+      });
+    }else{
+        this.navCtrl.setRoot('HomePage');
     }
-  ];
 
   }
 

@@ -30,7 +30,7 @@ export class ProfilePage {
     if (localStorage && localUser.email){
       this.ClienteService.findByEmail(localUser.email)
       .subscribe(response => {
-        this.cliente = response;
+        this.cliente = response as ClienteDTO;
         //buscar imagem
         this.getImageIfExists();
       }, error => {
