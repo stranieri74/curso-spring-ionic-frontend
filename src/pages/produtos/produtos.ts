@@ -3,6 +3,7 @@ import { ProdutoDTO } from './../../Models/produto.dto';
 import { Component } from '@angular/core';
 import { IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { API_CONFIG } from '../../config/api.config';
+import { THROW_IF_NOT_FOUND } from '@angular/core/src/di/injector';
 
 @IonicPage()
 @Component({
@@ -18,6 +19,10 @@ export class ProdutosPage {
   }
 
   ionViewDidLoad() {
+     this.loadData();
+  }
+
+  loadData(){
     let categoria_id = this.navParams.get('categoria_id');
     let loader = this.presentLoading();
     this.produtoService.findByCategoria(categoria_id)
@@ -50,10 +55,17 @@ export class ProdutosPage {
 //mostrando mensagem de carregando
   presentLoading(){
     let loader = this.loadCtrl.create({
-      content: "Por Favor Aguarde..."
+      content: "Aguarde..."
     });
     loader.present();
     return loader;
+  }
+
+  doRefresh(event) {
+    this.loadData();
+    setTimeout(() => {
+      event.complete();
+    }, 2000);
   }
 
 }
