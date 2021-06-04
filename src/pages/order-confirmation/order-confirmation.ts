@@ -19,6 +19,7 @@ export class OrderConfirmationPage {
   cartItems: CartItem[];
   cliente: ClienteDTO;
   endereco: EnderecoDTO;
+  codPedido: string;
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
@@ -35,7 +36,7 @@ export class OrderConfirmationPage {
        .subscribe(response => {
          this.cliente = response as ClienteDTO;
          this.endereco = this.findEndereco(this.pedido.enderecoDeEntrega.id, response['enderecos'])
-         console.log(this.pedido)
+         
        },
        error =>{
          //caso der algum erro ou token que expirou
@@ -55,11 +56,17 @@ private findEndereco(id: string, list: EnderecoDTO[]) : EnderecoDTO{
    back(){
        this.navCtrl.setRoot('CartPage');  
    }
+
+   home(){
+    this.navCtrl.setRoot('CategoriasPage');  
+}
+
    checkout(){
       this.pedidoService.insert(this.pedido)
       .subscribe(response => {
          //pegando a resposta do location
-         console.log(response.headers.get('location')); 
+         //pegando o id do produto gerado
+         this.codPedido = this.extractId(response.headers.get('location')); 
          this.carService.createOrClearCart();    
       },
       error => {
@@ -67,6 +74,12 @@ private findEndereco(id: string, list: EnderecoDTO[]) : EnderecoDTO{
            this.navCtrl.setRoot('HomePage');
         }
       })
+   }
+
+   //função auxiliar
+   private extractId(location : string) :string {
+     let position = location.lastIndexOf('/');
+     return location.substring(position+1, location.length);
    }
 
 }
