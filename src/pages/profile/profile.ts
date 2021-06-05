@@ -27,12 +27,17 @@ export class ProfilePage {
   }
 
   ionViewDidLoad() {
+     this.loadDate(); 
+  }
+
+  loadDate(){
     let localUser = this.storage.getLocalUser();
     if (localStorage && localUser.email){
       this.ClienteService.findByEmail(localUser.email)
       .subscribe(response => {
         this.cliente = response as ClienteDTO;
         //buscar imagem
+        console.log('deu certo procura img')
         this.getImageIfExists();
       }, error => {
         if(error.status == 403){
@@ -48,6 +53,7 @@ export class ProfilePage {
     this.ClienteService.getImagemFromBucket(this.cliente.id)
     .subscribe(response => {
       this.cliente.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`
+      console.log('Url '+ this.cliente.imageUrl)
     }, error =>{});
   }
 
@@ -69,6 +75,21 @@ export class ProfilePage {
       this.cameraOn = false;
     });
 
+  }
+
+  sendPicture(){
+    console.log("123");
+   this.ClienteService.uploadPicture(this.picture)
+      .subscribe(response => {
+        console.log('enviado');
+         this.picture = null;
+         this.loadDate();
+      },
+      error =>{});
+  }
+
+  cancel(){
+    this.picture = null;
   }
 
 }

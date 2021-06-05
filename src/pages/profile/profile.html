@@ -25,6 +25,8 @@
     </ion-item>
     <ion-item>
       <button ion-button block (click)="getCameraPicture()" [disabled]="cameraOn">Camera</button>
+      <button *ngIf="picture" ion-button outline (click)="sendPicture()" >Enviar Imagem</button>
+      <button *ngIf="picture" ion-button outline (click)="cancel()" >Descartar Imagem</button>
     </ion-item>
   </ion-card>
   </ion-content>
