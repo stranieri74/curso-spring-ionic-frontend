@@ -77,6 +77,26 @@ export class ProfilePage {
 
   }
 
+  getGalleryPicture(){
+    this.cameraOn = true;
+
+    const options: CameraOptions = {
+      quality: 100,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.PNG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((ImageData) => {
+      this.picture = 'data:image/png;base64,'+ImageData;
+      this.cameraOn = false;
+    }, (err) => {
+      this.cameraOn = false;
+    });
+
+  }
+
   sendPicture(){
     console.log("123");
    this.ClienteService.uploadPicture(this.picture)
