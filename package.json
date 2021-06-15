@@ -27,6 +27,7 @@
     "@ionic/storage": "2.2.0",
     "angular2-jwt": "^0.2.3",
     "cordova-android": "6.3.0",
+    "cordova-android-support-gradle-release": "^3.0.1",
     "cordova-browser": "5.0.4",
     "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-device": "^2.0.2",
@@ -54,7 +55,10 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-camera": {}
+      "cordova-plugin-camera": {},
+      "cordova-android-support-gradle-release": {
+        "ANDROID_SUPPORT_VERSION": "27.+"
+      }
     },
     "platforms": [
       "browser",

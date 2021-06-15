@@ -5,6 +5,7 @@ import { StorageService } from './../../services/storage.service';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @IonicPage()
 @Component({
@@ -15,6 +16,7 @@ export class ProfilePage {
   cliente: ClienteDTO;
   picture : string;
   cameraOn : boolean = false;
+  profileImage;
   ;
   
 
@@ -22,8 +24,10 @@ export class ProfilePage {
     public navParams: NavParams,
     public storage: StorageService,
     public ClienteService: ClienteService,
-    public camera: Camera
+    public camera: Camera,
+    public sanitizer: DomSanitizer
     ) {
+      this.profileImage = 'assets/imgs/avatar-blank.png';
   }
 
   ionViewDidLoad() {
@@ -53,8 +57,23 @@ export class ProfilePage {
     this.ClienteService.getImagemFromBucket(this.cliente.id)
     .subscribe(response => {
       this.cliente.imageUrl = `${API_CONFIG.bucketBaseUrl}/cp${this.cliente.id}.jpg`
-      console.log('Url '+ this.cliente.imageUrl)
-    }, error =>{});
+      this.blobToDataUrl(response).then(dataUrl =>{
+        let str: string = dataUrl as string
+        this.profileImage = this.sanitizer.bypassSecurityTrustUrl(str);
+      }) 
+    }, error =>{
+      this.profileImage = 'assets/imgs/avatar-blank.png';
+    });
+  }
+
+  //função para converter imagem para string
+  blobToDataUrl(blob){
+    return new Promise((fulfill, reject) => {
+      let reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = (e) => fulfill(reader.result);
+      reader.readAsDataURL(blob);
+    })
   }
 
   //acionar as cameras
@@ -103,7 +122,7 @@ export class ProfilePage {
       .subscribe(response => {
         console.log('enviado');
          this.picture = null;
-         this.loadDate();
+         this.getImageIfExists();
       },
       error =>{});
   }
